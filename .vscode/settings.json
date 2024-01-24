@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "iosfwd": "cpp",
+        "ostream": "cpp",
+        "*.inc": "cpp",
+        "cholesky": "cpp",
+        "vector": "cpp",
+        "iostream": "cpp"
+    }
+}
