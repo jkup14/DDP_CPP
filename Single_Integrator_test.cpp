@@ -16,9 +16,7 @@ int main() {
     Eigen::Matrix<float,T,nx> X = Eigen::Matrix<float, T, nx>::Zero();
     Eigen::Matrix<float,1,nx> x_goal = (Eigen::Matrix<float,1,nx>()<<1,2).finished();
     Eigen::Matrix<float,T,nx> X_track = x_goal.replicate<T,1>();
-    Eigen::Matrix<float,T-1,nu> U = Eigen::Matrix<float, T-1, nu>::Constant(0);
-    // std::cout << x0 << std::endl;
-    // std::cout << u0 << std::endl;
+    Eigen::Matrix<float,T-1,nu> U = Eigen::Matrix<float, T-1, nu>::Constant(1);
 
     // Test xdot
     std::cout << Model.xdot(x0, (Eigen::Matrix<float, nu, 1>()<<1,2).finished()) << std::endl;
@@ -37,9 +35,13 @@ int main() {
     Dyn.differentiate_integrator(X, U, ijs);
     std::cout << ijs << std::endl;
 
+    //Test Rollout
+    Dyn.rollout_controls(x0, U, X);
+    cout << "X:" << endl << X << endl;
+
     //Test cost
     auto Q = Eigen::Matrix<float, nx, nx>::Identity()*0;
-    auto R = Eigen::Matrix<float, nu, nu>::Identity()*0.001;
+    auto R = Eigen::Matrix<float, nu, nu>::Identity()*0.00001;
     auto Qf = Eigen::Matrix<float, nx, nx>::Identity()*1;
     QuadraticCost<T, nx, nu> cost(Q, R, Qf);
     cout << "Cost:" << endl;
@@ -48,12 +50,9 @@ int main() {
     cost.differentiate_cost(X, U, X_track, cjs);
     std::cout << cjs << std::endl;
 
-    //Initialize Solver
-    DDP::DDP_Solver<T, nx, nu> solver(Dyn, cost);
+
     
-    //Test Rollout
-    solver.rollout_controls(x0, U, X);
-    cout << "X:" << endl << X << endl;
+    
 
     //Test DDP
     Value_Jacobians_Struct<nx, nu> vjs(cjs.Lx.row(T-1), cjs.Lxx.back());
@@ -63,11 +62,14 @@ int main() {
                                 Eigen::Matrix<float, T-1, nu>::Constant(0),
                                 fs.K, std::vector<float>(5, 0));
     // cout << sol << endl;
+
+    //Initialize Solver
+    DDP::DDP_Solver<T, nx, nu> solver(Dyn, cost);
     
     std::pair<float, float> deltaVs = {0,0};
-    solver.backward_pass(cjs, ijs, vjs, fs, 0, deltaVs);
-    cout << fs << endl;
-    cout << "deltaV:" << endl << deltaVs.first << "," << deltaVs.second <<endl;
+    solver.backward_pass(cjs, ijs, fs, 0, deltaVs);
+    // cout << fs << endl;
+    // cout << "deltaV:" << endl << deltaVs.first << "," << deltaVs.second <<endl;
 
     Eigen::Matrix<float,T,nx> Xnew = Eigen::Matrix<float, T, nx>::Zero();
     Eigen::Matrix<float,T-1,nu> Unew = Eigen::Matrix<float, T-1, nu>::Zero();

@@ -10,7 +10,13 @@ class Integrator {
             :dynamics(dynamics_), dt(dt_) {}
 
         virtual Eigen::Matrix<type, nx, 1> propogate(const Eigen::Matrix<type, nx, 1>& x, const Eigen::Matrix<type, nu, 1>& u) const = 0;
-        virtual void differentiate_integrator(const Eigen::Matrix<type, T, nx>& X, const Eigen::Matrix<type, T-1, nu>& U, Integrator_Jacobians_Struct<T, nx, nu>& int_derivs) const = 0;
+        virtual void differentiate_integrator(const Eigen::Matrix<type, T, nx>& X, const Eigen::Matrix<type, T-1, nu>& U, Integrator_Jacobians_Struct<T, nx, nu>& ijs) const = 0;
+        void rollout_controls(const Eigen::Matrix<float, nx, 1>& x0, const Eigen::Matrix<float, T-1, nu>& U, Eigen::Matrix<float, T, nx>& X) const {
+                X.row(0) = x0.transpose();
+                for (int t = 0; t<T-1; t++) {
+                    X.row(t+1) = propogate(X.row(t), U.row(t)).transpose();
+                }
+            }
 
     protected:
         type dt;

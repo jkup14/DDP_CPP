@@ -7,9 +7,10 @@ using std::endl;
 
 template <int T, int nx, int nu, typename type=float>
 class Cost {
-    virtual type cost(const Eigen::Matrix<type, T, nx>& X, const Eigen::Matrix<type, T-1, nu>& U, const Eigen::Matrix<type, T, nx> X_track) const = 0;
+    public:
+        virtual type cost(const Eigen::Matrix<type, T, nx>& X, const Eigen::Matrix<type, T-1, nu>& U, const Eigen::Matrix<type, T, nx> X_track) const = 0;
 
-    virtual void differentiate_cost(const Eigen::Matrix<type, T, nx>& X, const Eigen::Matrix<type, T-1, nu>& U, const Eigen::Matrix<type, T, nx> X_track, Cost_Jacobians_Struct<T, nx, nu, type>& cjs) const = 0;
+        virtual void differentiate_cost(const Eigen::Matrix<type, T, nx>& X, const Eigen::Matrix<type, T-1, nu>& U, const Eigen::Matrix<type, T, nx> X_track, Cost_Jacobians_Struct<T, nx, nu, type>& cjs) const = 0;
 };
 
 template <int T, int nx, int nu, typename type=float>
@@ -38,6 +39,10 @@ class QuadraticCost : public Cost<T, nx, nu, type> {
                 cjs.Luu.at(t) = R;
                 cjs.Lxu.at(t) = Eigen::Matrix<type, nx, nu>::Zero();
             }
+            // cout << "X last " << X.row(T-1) << endl;
+            // cout << "X_track last" << X_track.row(T-1) << endl;
+            // cout << "X_diff last " << X_diff.row(T-1) << endl;
+            // cout << "Qf" << Qf << endl;
             cjs.Lx.row(T-1) = X_diff.row(T-1) * Qf;
             cjs.Lxx.at(T-1) = Qf;
         }
