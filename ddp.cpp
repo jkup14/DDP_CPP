@@ -138,12 +138,9 @@ namespace DDP {
 
                     rollout_ddp_gains(x0, Xbar, Ubar, Xnew, Unew, fs, alpha);
                     Cost_new = cost.cost(Xnew, Unew, X_track);
-                    // cout << endl << "Cost_new:" << Cost_new << endl;
                     true_reduction = Cost_old - Cost_new;
                     type expected_reduction = - alpha*(deltaV.first + alpha*deltaV.second);
-                    // cout << "Expected_reduction:" << expected_reduction << endl;
                     type z = true_reduction / expected_reduction;
-                    // cout << "Z:" << z << endl;
                     if (expected_reduction < 0) {
                         z = sgn(true_reduction);
                         cout << "negative expected reduction in cost!!" << endl;
@@ -153,7 +150,6 @@ namespace DDP {
                         Ubar = Unew;
                         Cost_old = Cost_new;
                         ls_success = true;
-                        // cout << "Success!" << endl;
                         break;
                     }
                     
@@ -163,7 +159,7 @@ namespace DDP {
                 }
 
                 if (verbose >= 1) {
-                            cout << endl;
+                            cout << " ...";
                 }
                 return {ls_success, true_reduction};
             }
