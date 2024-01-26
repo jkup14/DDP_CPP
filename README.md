@@ -10,22 +10,15 @@ Joshua Kuperman (jkup14@gmail.com, https://www.linkedin.com/in/joshuakuperman/)
 Last Update 01/26/2024
 
 Example files **Double_Integrator.cpp, Single_Integrator.cpp** gives a general idea on how the code should work.
-
-
+&nbsp; &nbsp; &nbsp; &nbsp;
 cost.hpp: cost interface
-
 cost.cpp: quadratic cost function
-
-
+&nbsp; &nbsp; &nbsp; &nbsp;
 dynamics.hpp: dynamics interface
-
 dynamics.cpp: single and double integrator, differential drive
-
-
+&nbsp; &nbsp; &nbsp; &nbsp;
 integrator.hpp: integrator interface
-
 integrator.cpp: Euler integrator for discretized dynamics
-
-
+&nbsp; &nbsp; &nbsp; &nbsp;
 ddp.hpp/cpp: DDP algorothm with linesearch implemented. Regularization will be added soon. 
 
