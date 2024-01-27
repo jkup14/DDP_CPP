@@ -78,7 +78,6 @@ namespace DDP {
                 std::vector<type> Costs(max_iters);
                 type cost_curr = cost.cost(X, U, X_track);
                 type cost_change = cost_curr;
-                type cost_new;
 
                 Cost_Jacobians_Struct<T, nx, nu, type> cjs;
                 Integrator_Jacobians_Struct<T, nx, nu, type> ijs;
@@ -93,7 +92,6 @@ namespace DDP {
                     cost.differentiate_cost(X, U, X_track, cjs);
                     dynamics.differentiate_integrator(X, U, ijs);
 
-                    cost_new = 0;
                     backward_pass(cjs, ijs, fs, 0, deltaV);
                     std::pair<bool, type> fp_results = forward_pass(x0, X, U, X_track, fs, deltaV, cost_curr);
                     ls_success = fp_results.first;
@@ -101,15 +99,17 @@ namespace DDP {
                     if (!ls_success) {
                         cout << "Linesearch failed, exiting...";
                         break;
-                    } else if (verbose >= 1) {
+                    } else if (verbose >= 2) {
                         cout << "Cost Reduced!" << endl;
+                    }
+                    if (verbose >= 1) {
+                        cout << "Iteration " << it << " Cost: " <<  cost_curr << endl;
                     }
 
                     it++;
                 }
 
-                cout << "DDP done in " << it << " iterations." << endl;
-                DDP::Solution<T, nx, nu, type> sol = DDP::Solution(X, U, fs.K, Costs);
+                DDP::Solution<T, nx, nu, type> sol = DDP::Solution(X, U, fs.K, Costs, it);
                 return sol;
             }
 
@@ -127,12 +127,12 @@ namespace DDP {
                 Eigen::Matrix<type, T-1, nu> Unew;
 
                 // cout << "Cost_old:" << Cost_old << endl;
-                if (verbose >= 1) {
+                if (verbose >= 2) {
                         cout << "Linesearch: trying alpha=";
                 } 
 
                 for (auto alpha: alphas) {
-                    if (verbose >= 1) {
+                    if (verbose >= 2) {
                         cout << alpha;
                     }
 
@@ -153,12 +153,12 @@ namespace DDP {
                         break;
                     }
                     
-                    if (verbose >= 1) {
+                    if (verbose >= 2) {
                         cout << ",";
                     }
                 }
 
-                if (verbose >= 1) {
+                if (verbose >= 2) {
                             cout << " ...";
                 }
                 return {ls_success, true_reduction};

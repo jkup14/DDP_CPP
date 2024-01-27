@@ -5,7 +5,7 @@
 //TODO eigen print formatting perhaps
 
 int main() {
-    const int T = 10;
+    const int T = 100;
     float dt = 0.1;
     SingleIntegrator<T> Model = SingleIntegrator<T>();
     const int nx = Model.getNx();
@@ -31,5 +31,9 @@ int main() {
     args.verbose = 1;
     DDP::DDP_Solver<T, nx, nu> solver(dynamics, cost, args);
     // Solve!
+    cout << "Solving..." << endl;
     DDP::Solution<T, nx, nu> sol = solver.solve(x0, U, X_track);
+    cout << "Done" << endl;
+    cout << "DDP done in " << sol.it << " iterations." << endl;
+    cout << "Final error: " << sol.X.row(T-1)-x_goal << endl;
 }

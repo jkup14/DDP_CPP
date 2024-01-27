@@ -12,11 +12,13 @@ namespace DDP {
         Eigen::Matrix<float, T-1, nu> U;
         std::vector<Eigen::Matrix<float, nu, nx> > K;
         std::vector<float> J;
+        int it;
         Solution(Eigen::Matrix<float, T, nx> X_, 
                  Eigen::Matrix<float, T-1, nu> U_,
                  std::vector<Eigen::Matrix<float, nu, nx> > K_, 
-                 std::vector<float> J_)
-                 : X(X_), U(U_), J(J_) {
+                 std::vector<float> J_,
+                 int it_)
+                 : X(X_), U(U_), J(J_), it(it_) {
                     if (K_.size() != T-1) {
                         throw std::runtime_error("K must be size T-1");
                     } 
