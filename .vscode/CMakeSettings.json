@@ -1,0 +1,20 @@
+{
+    "configurations": [
+        {
+            "name": "Debug",
+            "generator": "Ninja",
+            "configurationType": "Debug",
+            "buildRoot": "${workspaceFolder}/build",
+            "installRoot": "${workspaceFolder}/install",
+            "cmakeCommandArgs": "",
+            "buildCommandArgs": "-v",
+            "ctestCommandArgs": "",
+            "inheritEnvironments": [
+                "clang++",
+                "gcc",
+                "g++"
+            ],
+            "intelliSenseMode": "macos-clang-x64"
+        }
+    ]
+}

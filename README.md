@@ -1,5 +1,5 @@
 # Differential Dynamic Programming in C++
-The popular trajectory optimization technique implemented in C++ and the Eigen Library for the linear algebra. Heavily typed and templated so that all matrices have knows sizes. This allows Eigen to optimize during compilation. 
+The popular trajectory optimization technique implemented in C++ and the Eigen Library for the linear algebra. Heavily typed and templated so that all matrices have knowns sizes. This allows Eigen to optimize during compilation. 
 
 **Next steps: visualization, additional dynamics functions, regularization, automatic differentiation, allocate on the heap, control constraints via box-ddp**
 

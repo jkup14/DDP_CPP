@@ -1,6 +1,7 @@
 #include <iostream>
 #include <Eigen/Cholesky>
-#include "ddp.cpp"
+#include "include/ddp.hpp"
+#include <matplot/matplot.h>
 
 //TODO eigen print formatting perhaps
 
@@ -36,4 +37,10 @@ int main() {
     cout << "Done" << endl;
     cout << "DDP done in " << sol.it << " iterations." << endl;
     cout << "Final error: " << sol.X.row(T-1)-x_goal << endl;
+    cout << sol <<endl;
+    std::vector<float> vec1(sol.X.col(0).data(), sol.X.col(0).data() + sol.X.col(0).rows() * sol.X.col(0).cols());
+    std::vector<float> vec2(sol.X.col(1).data(), sol.X.col(1).data() + sol.X.col(1).rows() * sol.X.col(1).cols());
+
+    matplot::plot(vec1, vec2);
+    matplot::show();
 }

@@ -1,11 +1,12 @@
 #include <iostream>
 #include <Eigen/Cholesky>
-#include "ddp.cpp"
+#include "include/ddp.hpp"
+#include <matplot/matplot.h>
 
 //TODO eigen print formatting perhaps
 
 int main() {
-    const int T = 1000;
+    const int T = 100;
     float dt = 0.01;
     DifferentialDrive<T> Model = DifferentialDrive<T>();
     const int nx = Model.getNx();
@@ -36,6 +37,11 @@ int main() {
     DDP::Solution<T, nx, nu> sol = solver.solve(x0, U, X_track);
     cout << "Done" << endl;
     cout << "DDP done in " << sol.it << " iterations." << endl;
-
     cout << "Final error: " << sol.X.row(T-1)-x_goal << endl;
+
+    std::vector<float> vec1(sol.X.col(0).data(), sol.X.col(0).data() + sol.X.col(0).rows() * sol.X.col(0).cols());
+    std::vector<float> vec2(sol.X.col(1).data(), sol.X.col(1).data() + sol.X.col(1).rows() * sol.X.col(1).cols());
+
+    matplot::plot(vec1, vec2);
+    matplot::show();
 }

@@ -1,6 +1,9 @@
 #include <iostream>
-#include <Eigen/Cholesky>
-#include "ddp.cpp"
+#include "include/ddp.hpp"
+// #include "include/dynamics.hpp"
+// #include "include/integrator.hpp"
+// #include "include/return_type_structs.hpp"
+// #include "include/cost.hpp"
 
 //TODO eigen print formatting perhaps
 
@@ -21,7 +24,7 @@ int main() {
     // Test xdot
     std::cout << Model.xdot(x0, (Eigen::Matrix<float, nu, 1>()<<1,2).finished()) << std::endl;
 
-    //Test differentiate dynamics and << override
+    // //Test differentiate dynamics and << override
     Dynamics_Jacobians_Struct<T, nx, nu> djs;
     Model.differentiate_dynamics(X, U, djs);
     std::cout << djs << std::endl;
@@ -30,7 +33,7 @@ int main() {
     EulerIntegrator<T, nx, nu> Dyn(Model, dt);
     std::cout << "xnext:" << endl << Dyn.propogate(x0, (Eigen::Matrix<float, nu, 1>()<<1,2).finished()) << std::endl;
 
-    // //Test differentiate integrator and << override
+    // Test differentiate integrator and << override
     Integrator_Jacobians_Struct<T, nx, nu> ijs;
     Dyn.differentiate_integrator(X, U, ijs);
     std::cout << ijs << std::endl;
@@ -50,26 +53,18 @@ int main() {
     cost.differentiate_cost(X, U, X_track, cjs);
     std::cout << cjs << std::endl;
 
-
-    
-    
-
     //Test DDP
     Value_Jacobians_Struct<nx, nu> vjs(cjs.Lx.row(T-1), cjs.Lxx.back());
     Feedback_Struct<T, nx, nu> fs;
-    // cout << vjs << endl << fs << endl;
-    DDP::Solution<T, nx, nu> sol(Eigen::Matrix<float, T, nx>::Constant(0), 
-                                Eigen::Matrix<float, T-1, nu>::Constant(0),
-                                fs.K, std::vector<float>(5, 0));
-    // cout << sol << endl;
+    cout << vjs << endl << fs << endl;
 
     //Initialize Solver
     DDP::DDP_Solver<T, nx, nu> solver(Dyn, cost);
     
     std::pair<float, float> deltaVs = {0,0};
     solver.backward_pass(cjs, ijs, fs, 0, deltaVs);
-    // cout << fs << endl;
-    // cout << "deltaV:" << endl << deltaVs.first << "," << deltaVs.second <<endl;
+    cout << fs << endl;
+    cout << "deltaV:" << endl << deltaVs.first << "," << deltaVs.second <<endl;
 
     Eigen::Matrix<float,T,nx> Xnew = Eigen::Matrix<float, T, nx>::Zero();
     Eigen::Matrix<float,T-1,nu> Unew = Eigen::Matrix<float, T-1, nu>::Zero();
@@ -77,9 +72,12 @@ int main() {
     cout << "Xnew:" << endl << Xnew << endl;
     cout << "Unew:" << endl << Unew << endl;
 
-    // DDP::Solution<T_, nx, nu> sol(
-    //     Eigen::Matrix<float, T_, nx>::Zero(), 
-    //     Eigen::Matrix<float, T_, nu>::Zero(), 
-    //     std::vector<Eigen::Matrix<float, nu, nx> >(10, Eigen::Matrix<float,nu,nx>::Zero()),
-    //     std::vector<float>(T, 1.5));
+    DDP::Solution<T, nx, nu> sol(
+        Eigen::Matrix<float, T, nx>::Zero(), 
+        Eigen::Matrix<float, T-1, nu>::Zero(), 
+        std::vector<Eigen::Matrix<float, nu, nx> >(10-1, Eigen::Matrix<float,nu,nx>::Zero()),
+        std::vector<float>(T, 1.5),
+        10);
+    cout << sol << endl;
+
 }
