@@ -16,9 +16,13 @@ cmake -B build # make build directory
 cmake --build build # make executables in /executables, run this every time you make a change
 ~~~
 
+## Code Structure
+
 Example files **Double_Integrator.cpp, Single_Integrator.cpp, Differential_Drive.cpp** gives a general idea on how the code should work.  
 
 $~$
+
+#### Headers in /include, .cpp's in /source
 
 cost.hpp: cost interface
 
