@@ -7,7 +7,14 @@ For constrained ddp using barrier states and differentiable control, check out m
 
 Joshua Kuperman (jkup14@gmail.com, https://www.linkedin.com/in/joshuakuperman/)
 
-Last Update 01/26/2024
+Last Update 02/09/2024
+
+## Build instructions
+~~~
+cmake -B build # make build directory
+
+cmake --build build # make executables in /executables, run this every time you make a change
+~~~
 
 Example files **Double_Integrator.cpp, Single_Integrator.cpp, Differential_Drive.cpp** gives a general idea on how the code should work.  
 
