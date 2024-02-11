@@ -30,7 +30,6 @@ target_include_directories(Single_Integrator #must be the same executable name
     PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     "/opt/homebrew/include/eigen3"
-    # "/opt/homebrew/Cellar/matplotplusplus/1.2.0/include"
 )
 target_link_libraries(Single_Integrator PUBLIC
     matplot
@@ -50,7 +49,6 @@ add_executable(Double_Integrator
 target_include_directories(Double_Integrator PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     "/opt/homebrew/include/eigen3"
-    # "/opt/homebrew/Cellar/matplotplusplus/1.2.0/include"
 )
 target_link_libraries(Double_Integrator PUBLIC
     matplot
@@ -70,7 +68,6 @@ add_executable(Differential_Drive
 target_include_directories(Differential_Drive PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     "/opt/homebrew/include/eigen3"
-    # "/opt/homebrew/Cellar/matplotplusplus/1.2.0/include"
 )
 target_link_libraries(Differential_Drive PUBLIC
     matplot

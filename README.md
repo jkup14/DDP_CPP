@@ -11,6 +11,10 @@ Last Update 02/09/2024
 
 ## Build instructions
 ~~~
+brew install eigen
+
+git clone https://github.com/alandefreitas/matplotplusplus/ # clone as subdirectory
+
 cmake -B build # make build directory
 
 cmake --build build # make executables in /executables, run this every time you make a change
