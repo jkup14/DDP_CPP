@@ -29,7 +29,7 @@ int main() {
     
     //Initialize Solver
     DDP::solver_args args;
-    args.verbose = 0;
+    args.verbose = 2;
     args.conv_threshold = 1e-3;
     DDP::DDP_Solver<T, nx, nu> solver(dynamics, cost, args);
     // Solve!
