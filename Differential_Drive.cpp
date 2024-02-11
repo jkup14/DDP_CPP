@@ -6,7 +6,7 @@
 //TODO eigen print formatting perhaps
 
 int main() {
-    const int T = 100;
+    const int T = 1000;
     float dt = 0.01;
     DifferentialDrive<T> Model = DifferentialDrive<T>();
     const int nx = Model.getNx();
@@ -23,13 +23,14 @@ int main() {
 
     //Cost
     auto Q = Eigen::Matrix<float, nx, nx>::Identity()*0;
-    auto R = Eigen::Matrix<float, nu, nu>::Identity()*0.00001;
+    auto R = Eigen::Matrix<float, nu, nu>::Identity()*0.0001;
     auto Qf = Eigen::Matrix<float, nx, nx>::Identity()*100;
     QuadraticCost<T, nx, nu> cost(Q, R, Qf);
     
     //Initialize Solver
     DDP::solver_args args;
     args.verbose = 0;
+    args.toggle_ls = false;
     args.conv_threshold = 1e-3;
     DDP::DDP_Solver<T, nx, nu> solver(dynamics, cost, args);
     // Solve!

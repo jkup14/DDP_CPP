@@ -30,6 +30,7 @@ int main() {
     //Initialize Solver
     DDP::solver_args args;
     args.verbose = 1;
+    args.toggle_reg = true;
     DDP::DDP_Solver<T, nx, nu> solver(dynamics, cost, args);
     // Solve!
     cout << "Solving..." << endl;
@@ -37,7 +38,7 @@ int main() {
     cout << "Done" << endl;
     cout << "DDP done in " << sol.it << " iterations." << endl;
     cout << "Final error: " << sol.X.row(T-1)-x_goal << endl;
-    cout << sol <<endl;
+    // cout << sol <<endl;
     std::vector<float> vec1(sol.X.col(0).data(), sol.X.col(0).data() + sol.X.col(0).rows() * sol.X.col(0).cols());
     std::vector<float> vec2(sol.X.col(1).data(), sol.X.col(1).data() + sol.X.col(1).rows() * sol.X.col(1).cols());
 

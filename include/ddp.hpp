@@ -15,7 +15,7 @@ namespace DDP {
         int max_iters = 500;
         type conv_threshold = 1e-3;
         type reg_mu_min = 10e-6;
-        type reg_mu_max = 10e10;
+        type reg_mu_max = 1e10;
         type reg_delta_0 = 2;
         type ls_alpha_0 = 1;
         type ls_alpha_f = 10e-3;
@@ -33,17 +33,18 @@ namespace DDP {
                 const solver_args<type> args = solver_args<type>());
 
             DDP::Solution<T, nx, nu, type> solve(const Eigen::Matrix<type, nx, 1>& x0,
-                  Eigen::Matrix<type, T-1, nu>& U,
-                  Eigen::Matrix<type, T, nx>& X_track, double mu = 10e-6, double delta = 0) ;
+                Eigen::Matrix<type, T-1, nu>& U,
+                Eigen::Matrix<type, T, nx>& X_track, type mu = 10e-6, type delta = 0) ;
 
+            void printIteration (const int& it, const type& cost_curr);
 
             std::pair<bool, type> forward_pass(const Eigen::Matrix<type, nx, 1>& x0,
-                                Eigen::Matrix<type, T, nx>& Xbar, 
-                                Eigen::Matrix<type, T-1, nu>& Ubar, 
-                                const Eigen::Matrix<type, T, nx>& X_track,                        
-                                const Feedback_Struct<T, nx, nu, type>& fs,
-                                std::pair<type, type>& deltaV,
-                                type& Cost_old) ;
+                Eigen::Matrix<type, T, nx>& Xbar, 
+                Eigen::Matrix<type, T-1, nu>& Ubar, 
+                const Eigen::Matrix<type, T, nx>& X_track,                        
+                const Feedback_Struct<T, nx, nu, type>& fs,
+                std::pair<type, type>& deltaV,
+                type& Cost_old) ;
             
 
             void rollout_ddp_gains(const Eigen::Matrix<type, nx, 1>& x0,
@@ -61,7 +62,7 @@ namespace DDP {
                                std::pair<type, type>& deltaV);
 
         private:
-            void increaseReg(type &mu, type &delta) ;
+            bool increaseReg(type &mu, type &delta) ;
 
             void decreaseReg(type &mu, type &delta) ;
 
@@ -74,6 +75,8 @@ namespace DDP {
             const type reg_delta_0;
             const int verbose;
             std::vector<type> alphas; 
+            const bool toggle_ls;
+            const bool toggle_reg;
     };
 }
 

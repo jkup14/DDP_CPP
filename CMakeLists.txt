@@ -3,16 +3,17 @@ project(DDP_CPP CXX)
 set(CMAKE_CXX_STANDARD 20)
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ../executables)
 
-include(FetchContent)
+add_subdirectory(matplotplusplus)
 
-FetchContent_Declare(matplotplusplus
-        GIT_REPOSITORY https://github.com/alandefreitas/matplotplusplus)
 
-FetchContent_GetProperties(matplotplusplus)
-if(NOT matplotplusplus_POPULATED)
-    FetchContent_Populate(matplotplusplus)
-    add_subdirectory(${matplotplusplus_SOURCE_DIR} ${matplotplusplus_BINARY_DIR} EXCLUDE_FROM_ALL)
-endif()
+# FetchContent_Declare(matplotplusplus
+#         GIT_REPOSITORY https://github.com/alandefreitas/matplotplusplus)
+
+# FetchContent_GetProperties(matplotplusplus)
+# if(NOT matplotplusplus_POPULATED)
+#     FetchContent_Populate(matplotplusplus)
+#     add_subdirectory(${matplotplusplus_SOURCE_DIR} ${matplotplusplus_BINARY_DIR} EXCLUDE_FROM_ALL)
+# endif()
 
 ##### Single Integrator  #####
 add_executable(Single_Integrator # Name of executable
@@ -29,6 +30,7 @@ target_include_directories(Single_Integrator #must be the same executable name
     PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     "/opt/homebrew/include/eigen3"
+    # "/opt/homebrew/Cellar/matplotplusplus/1.2.0/include"
 )
 target_link_libraries(Single_Integrator PUBLIC
     matplot
@@ -48,6 +50,7 @@ add_executable(Double_Integrator
 target_include_directories(Double_Integrator PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     "/opt/homebrew/include/eigen3"
+    # "/opt/homebrew/Cellar/matplotplusplus/1.2.0/include"
 )
 target_link_libraries(Double_Integrator PUBLIC
     matplot
@@ -67,6 +70,7 @@ add_executable(Differential_Drive
 target_include_directories(Differential_Drive PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     "/opt/homebrew/include/eigen3"
+    # "/opt/homebrew/Cellar/matplotplusplus/1.2.0/include"
 )
 target_link_libraries(Differential_Drive PUBLIC
     matplot
