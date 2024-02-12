@@ -16,7 +16,7 @@ matplotplusplus 1.2.0
 
 ## Build instructions
 ~~~
-brew install eigen
+brew install eigen  # this is for macOS, change for your system
 
 git clone https://github.com/alandefreitas/matplotplusplus/ # clone as subdirectory
 
