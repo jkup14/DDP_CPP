@@ -7,7 +7,7 @@ For constrained ddp using barrier states and differentiable control, check out m
 
 Joshua Kuperman (jkup14@gmail.com, https://www.linkedin.com/in/joshuakuperman/)
 
-Last Update 02/09/2024
+Last Update 02/12/2024
 
 ## Dependencies
 eigen 3.4.0
