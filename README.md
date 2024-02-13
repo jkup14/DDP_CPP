@@ -1,7 +1,7 @@
 # Differential Dynamic Programming in C++
 The popular trajectory optimization technique implemented in C++ and the Eigen Library for the linear algebra. Heavily typed and templated so that all matrices have knowns sizes. This allows Eigen to optimize during compilation. 
 
-**Next steps: additional dynamics functions, mpc, automatic differentiation, allocate on the heap, control constraints via box-ddp**
+**Next steps: additional dynamics functions, multi-shooting/multi-threading, mpc, automatic differentiation, allocate on the heap, control constraints via box-ddp**
 
 For constrained ddp using barrier states and differentiable control, check out my python repo https://github.com/jkup14/Safe-PDP-DDP
 
