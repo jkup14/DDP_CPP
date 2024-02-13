@@ -5,12 +5,14 @@ using std::endl;
 
 namespace DDP {
     template <int T, int nx, int nu, typename type>
-    Solution<T, nx, nu, type>::Solution(Eigen::Matrix<type, T, nx> X_, 
+    Solution<T, nx, nu, type>::Solution(
+        Eigen::Matrix<type, T, nx> X_, 
         Eigen::Matrix<type, T-1, nu> U_,
         std::vector<Eigen::Matrix<type, nu, nx> > K_, 
         std::vector<type> J_,
-        int it_)
-        : X(X_), U(U_), J(J_), K(K_), it(it_) {
+        int it_,
+        double ms_)
+        : X(X_), U(U_), J(J_), K(K_), it(it_), ms(ms_) {
         if (K_.size() != T-1) {
             throw std::runtime_error("K must be size T-1");
         } 

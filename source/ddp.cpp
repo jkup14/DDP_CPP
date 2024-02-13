@@ -7,6 +7,8 @@
 #include "../include/cost.hpp"
 #include <Eigen/LU>
 #include "sign_func.cpp"
+using std::chrono::high_resolution_clock;
+using std::chrono::duration;
 
 template <int T, int nx, int nu, typename type>
 DDP::DDP_Solver<T, nx, nu, type>::DDP_Solver(const Integrator<T, nx, nu, type>& dynamics_,
@@ -18,10 +20,11 @@ DDP::DDP_Solver<T, nx, nu, type>::DDP_Solver(const Integrator<T, nx, nu, type>& 
         conv_threshold(args.conv_threshold),
         reg_mu_min(args.reg_mu_min),
         reg_mu_max(args.reg_mu_max),
-        reg_delta_0(args.reg_delta_0),
+        reg_delta_factor(args.reg_delta_factor),
         verbose(args.verbose),
         toggle_ls(args.toggle_ls),
-        toggle_reg(args.toggle_reg) {
+        toggle_reg(args.toggle_reg),
+        timing_level(args.timing_level) {
 
     
     // Handling of linesearch and regularization options
@@ -50,14 +53,17 @@ template <int T, int nx, int nu, typename type>
 DDP::Solution<T, nx, nu, type> DDP::DDP_Solver<T, nx, nu, type>::solve(const Eigen::Matrix<type, nx, 1>& x0,
         Eigen::Matrix<type, T-1, nu>& U,
         Eigen::Matrix<type, T, nx>& X_track, type mu, type delta) {
-
+    
+    duration<double, std::milli> ms;
+    std::chrono::time_point<high_resolution_clock> t1, t2;
+    if (timing_level >= 1) {t1 = high_resolution_clock::now();}
     if (delta == 0) {
-        delta = reg_delta_0;
+        delta = reg_delta_factor;
     }
+
 
     Eigen::Matrix<type, T, nx> X;
     dynamics.rollout_controls(x0, U, X);
-    // cout << "X_0:" << endl << X << endl << "U_0:" << endl << U << endl;
 
     std::vector<type> Costs(max_iters);
     type cost_curr = cost.cost(X, U, X_track);
@@ -78,10 +84,12 @@ DDP::Solution<T, nx, nu, type> DDP::DDP_Solver<T, nx, nu, type>::solve(const Eig
         cost.differentiate_cost(X, U, X_track, cjs);
         dynamics.differentiate_integrator(X, U, ijs);
 
+
         backward_pass(cjs, ijs, fs, mu, deltaV);
         std::pair<bool, type> fp_results = forward_pass(x0, X, U, X_track, fs, deltaV, cost_curr);
         forwardpass_success = fp_results.first;
         cost_change = fp_results.second;
+
         // If change in cost is <= 0, we keep going
         cost_continuation_criteria = forwardpass_success ? cost_change >= conv_threshold : true;
 
@@ -89,25 +97,33 @@ DDP::Solution<T, nx, nu, type> DDP::DDP_Solver<T, nx, nu, type>::solve(const Eig
         it++;
         
         if (forwardpass_success) {
-            printIteration(it, cost_curr);
             if (toggle_reg) {decreaseReg(mu, delta);}
+            printIteration(it, cost_curr, mu);
             continue; // go to next iteration
         } 
         // go to next iteration if regularization is successful
         if (toggle_reg && increaseReg(mu, delta)) {continue;} 
-        cout << "Solution not found, exiting..." << endl;
+        if (verbose >= 1) {cout << "Solution not found, exiting..." << endl;}
         break;
+    }
+    if (timing_level >= 1) {
+        t2 = high_resolution_clock::now();
+        ms = (t2 - t1);
     }
 
     if (it >= max_iters && verbose >= 1) { cout << "Max iterations reached" << endl;}
 
-    DDP::Solution<T, nx, nu, type> sol = DDP::Solution<T, nx, nu, type>(X, U, fs.K, std::vector<type>(Costs.begin(), Costs.begin()+it), it-1);
+    DDP::Solution<T, nx, nu, type> sol = DDP::Solution<T, nx, nu, type>(X, U, fs.K, std::vector<type>(Costs.begin(), Costs.begin()+it), it-1, ms.count());
     return sol;
 }
 
 template <int T, int nx, int nu, typename type>
-void DDP::DDP_Solver<T, nx, nu, type>::printIteration (const int& it, const type& cost_curr) {
-    if (verbose >= 2) {cout << "Cost Reduced!" << endl;}
+void DDP::DDP_Solver<T, nx, nu, type>::printIteration (const int& it, const type& cost_curr, const type& mu) {
+    if (verbose >= 2) {
+        cout << "Cost Reduced! ";
+        if (toggle_reg && mu > 0) {cout << "Mu is now " << mu << endl;}
+        else { cout << endl;}
+    }
     if (verbose >= 1) {cout << "Iteration " << it << " Cost: " <<  cost_curr << endl;}
 }
 
@@ -213,7 +229,7 @@ void DDP::DDP_Solver<T, nx, nu, type>::backward_pass(const Cost_Jacobians_Struct
 
 template <int T, int nx, int nu, typename type>
 bool DDP::DDP_Solver<T, nx, nu, type>::increaseReg(type &mu, type &delta) {
-    delta = std::max(reg_delta_0, delta*reg_delta_0);
+    delta = std::max(reg_delta_factor, delta*reg_delta_factor);
     mu = std::max(reg_mu_min, mu*delta);
     if (verbose >= 2) {
         cout << "Failed, Mu is now " << mu << endl;
@@ -223,16 +239,9 @@ bool DDP::DDP_Solver<T, nx, nu, type>::increaseReg(type &mu, type &delta) {
 
 template <int T, int nx, int nu, typename type>
 void DDP::DDP_Solver<T, nx, nu, type>::decreaseReg(type &mu, type &delta) {
-    delta = std::min(1/reg_delta_0, delta/reg_delta_0);
+    delta = std::min(1/reg_delta_factor, delta/reg_delta_factor);
     type md = mu*delta;
-    if (md >= reg_mu_min) {
-        mu = md;
-    } else {
-        mu = 0;
-    }
-    if (verbose >= 2 && mu != 0) {
-        cout << "Mu is now " << mu << endl;
-    }
+    mu = (md >= reg_mu_min) ? md : 0;
 }
 
 #endif

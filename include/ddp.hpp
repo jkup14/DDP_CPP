@@ -16,12 +16,13 @@ namespace DDP {
         type conv_threshold = 1e-3;
         type reg_mu_min = 10e-6;
         type reg_mu_max = 1e10;
-        type reg_delta_0 = 2;
+        type reg_delta_factor = 2;
         type ls_alpha_0 = 1;
         type ls_alpha_f = 10e-3;
         int ls_alpha_len = 11;
         bool toggle_ls = true;
         bool toggle_reg = true;
+        int timing_level = 0;
         int verbose = 0;
     };
 
@@ -36,7 +37,7 @@ namespace DDP {
                 Eigen::Matrix<type, T-1, nu>& U,
                 Eigen::Matrix<type, T, nx>& X_track, type mu = 10e-6, type delta = 0) ;
 
-            void printIteration (const int& it, const type& cost_curr);
+            void printIteration (const int& it, const type& cost_curr, const type& mu);
 
             std::pair<bool, type> forward_pass(const Eigen::Matrix<type, nx, 1>& x0,
                 Eigen::Matrix<type, T, nx>& Xbar, 
@@ -72,11 +73,12 @@ namespace DDP {
             const type conv_threshold;
             const type reg_mu_min;
             const type reg_mu_max;
-            const type reg_delta_0;
+            const type reg_delta_factor;
             const int verbose;
             std::vector<type> alphas; 
             const bool toggle_ls;
             const bool toggle_reg;
+            const int timing_level;
     };
 }
 
