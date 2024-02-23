@@ -24,7 +24,9 @@ add_executable(Single_Integrator # Name of executable
     include/return_type_structs.hpp
     include/dynamics.hpp
     include/integrator.hpp
-    source/sign_func.cpp
+    source/plot_functions.cpp
+    include/sign_func.hpp
+    
 )
 target_include_directories(Single_Integrator #must be the same executable name
     PRIVATE
@@ -44,7 +46,8 @@ add_executable(Double_Integrator
     include/return_type_structs.hpp
     include/dynamics.hpp
     include/integrator.hpp
-    source/sign_func.cpp
+    source/plot_functions.cpp
+    include/sign_func.hpp
 )
 target_include_directories(Double_Integrator PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/include
@@ -63,7 +66,8 @@ add_executable(Differential_Drive
     include/return_type_structs.hpp
     include/dynamics.hpp
     include/integrator.hpp
-    source/sign_func.cpp
+    source/plot_functions.cpp
+    include/sign_func.hpp
 )
 target_include_directories(Differential_Drive PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/include
