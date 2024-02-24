@@ -9,20 +9,27 @@ Joshua Kuperman (jkup14@gmail.com, https://www.linkedin.com/in/joshuakuperman/)
 
 Last Update 02/12/2024
 
-## Dependencies
+## Dependencies (installed and updated as submodules automatically using CMake)
 eigen 3.4.0
 matplotplusplus 1.2.0
 
 
 ## Build instructions
 ~~~
-brew install eigen  # this is for macOS, change for your system
-
 git clone https://github.com/alandefreitas/matplotplusplus/ # clone as subdirectory
+
+cd /DDP_CPP
 
 cmake -B build # make build directory
 
 cmake --build build # make executables in /executables, run this every time you make a change
+~~~
+
+## Run Examples
+~~~
+./executables/Differential_Drive
+./executables/Double_Integrator
+./executables/Single_Integrator
 ~~~
 
 ## Code Structure
