@@ -1,0 +1,6 @@
+[submodule "matplotplusplus"]
+	path = matplotplusplus
+	url = https://github.com/alandefreitas/matplotplusplus.git
+[submodule "cmake/eigen"]
+	path = cmake/eigen
+	url = https://gitlab.com/libeigen/eigen.git
