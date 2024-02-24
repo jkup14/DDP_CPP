@@ -28,10 +28,11 @@ foreach(exec ${executables})
         PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         eigen
+        matplotplusplus/source
     )
-    # target_link_libraries(${exec} PUBLIC
-    #     matplot
-    # )
+    target_link_libraries(${exec} PUBLIC
+        matplot
+    )
 endforeach()
 
 set(CMAKE_BUILD_TYPE Debug)  # Or Release
