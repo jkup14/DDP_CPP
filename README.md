@@ -25,6 +25,13 @@ cmake -B build # make build directory
 cmake --build build # make executables in /executables, run this every time you make a change
 ~~~
 
+## Run Examples
+~~~
+./executables/Differential_Drive
+./executables/Double_Integrator
+./executables/Single_Integrator
+~~~
+
 ## Code Structure
 
 Example files **Double_Integrator.cpp, Single_Integrator.cpp, Differential_Drive.cpp** gives a general idea on how the code should work.  
