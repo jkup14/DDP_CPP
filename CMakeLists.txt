@@ -3,10 +3,10 @@ project(DDP_CPP CXX)
 set(CMAKE_CXX_STANDARD 20)
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ../executables)
 
-add_subdirectory(matplotplusplus)
-
 # Update the submodules here
 include(cmake/UpdateSubmodules.cmake)
+
+add_subdirectory(matplotplusplus)
 
 # Add additional executables to this list
 list(APPEND executables Single_Integrator Double_Integrator Differential_Drive)
