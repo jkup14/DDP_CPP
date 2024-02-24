@@ -9,7 +9,7 @@ Joshua Kuperman (jkup14@gmail.com, https://www.linkedin.com/in/joshuakuperman/)
 
 Last Update 02/12/2024
 
-## Dependencies
+## Dependencies (installed and updated as submodules automatically using CMake)
 eigen 3.4.0
 matplotplusplus 1.2.0
 
