@@ -11,7 +11,7 @@ namespace DDP {
         std::vector<Eigen::Matrix<type, nu, nx> > K_, 
         std::vector<type> J_,
         int it_,
-        double ms_)
+        long long ms_)
         : X(X_), U(U_), J(J_), K(K_), it(it_), ms(ms_) {
         if (K_.size() != T-1) {
             throw std::runtime_error("K must be size T-1");

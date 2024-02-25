@@ -7,6 +7,7 @@
 #include "../include/cost.hpp"
 #include <Eigen/LU>
 #include "../include/sign_func.hpp"
+#include "../include/timer.hpp"
 
 
 namespace DDP {

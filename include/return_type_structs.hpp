@@ -14,14 +14,14 @@ namespace DDP {
         std::vector<Eigen::Matrix<type, nu, nx> > K;
         std::vector<type> J;
         int it;
-        double ms;
+        long long ms;
 
         Solution(Eigen::Matrix<type, T, nx> X_, 
                  Eigen::Matrix<type, T-1, nu> U_,
                  std::vector<Eigen::Matrix<type, nu, nx> > K_, 
                  std::vector<type> J_,
                  int it_,
-                 double ms_);
+                 long long ms_);
 
     template <int T_, int nx_, int nu_, typename type_>
     friend std::ostream& operator<<(std::ostream& os, const Solution<T_, nx_, nu_, type_>& vjs);

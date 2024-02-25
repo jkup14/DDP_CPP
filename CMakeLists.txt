@@ -20,6 +20,7 @@ foreach(exec ${executables})
         include/return_type_structs.hpp
         include/dynamics.hpp
         include/integrator.hpp
+        source/timer.cpp
         source/plot_functions.cpp
         include/sign_func.hpp
         

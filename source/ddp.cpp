@@ -7,6 +7,8 @@
 #include "../include/cost.hpp"
 #include <Eigen/LU>
 #include "sign_func.cpp"
+#include "../include/timer.hpp"
+
 using std::chrono::high_resolution_clock;
 using std::chrono::duration;
 
@@ -54,9 +56,15 @@ DDP::Solution<T, nx, nu, type> DDP::DDP_Solver<T, nx, nu, type>::solve(const Eig
         Eigen::Matrix<type, T-1, nu>& U,
         Eigen::Matrix<type, T, nx>& X_track, type mu, type delta) {
     
-    duration<double, std::milli> ms;
-    std::chrono::time_point<high_resolution_clock> t1, t2;
-    if (timing_level >= 1) {t1 = high_resolution_clock::now();}
+    Timer total_Timer;
+    Timer fp_Timer;
+    Timer bp_Timer;
+    Timer dCost_Timer;
+    Timer dIntegrator_Timer;
+    long long total_Time;
+    if (timing_level >= 1) {total_Timer.Start();}
+
+
     if (delta == 0) {
         delta = reg_delta_factor;
     }
@@ -81,12 +89,26 @@ DDP::Solution<T, nx, nu, type> DDP::DDP_Solver<T, nx, nu, type>::solve(const Eig
     while (it < max_iters && cost_continuation_criteria) {
         Costs.at(it) = cost_curr;
 
+        if (timing_level >= 2) {dCost_Timer.Start();}
         cost.differentiate_cost(X, U, X_track, cjs);
+        if (timing_level >= 2) {
+            dCost_Timer.Stop();
+            dIntegrator_Timer.Start();
+        }
         dynamics.differentiate_integrator(X, U, ijs);
-
+        if (timing_level >= 2) {
+            dIntegrator_Timer.Stop();
+            bp_Timer.Start();
+        }
 
         backward_pass(cjs, ijs, fs, mu, deltaV);
+        if (timing_level >= 2) {
+            bp_Timer.Stop();
+            fp_Timer.Start();
+        }
         std::pair<bool, type> fp_results = forward_pass(x0, X, U, X_track, fs, deltaV, cost_curr);
+        if (timing_level >= 2) {fp_Timer.Stop();}
+
         forwardpass_success = fp_results.first;
         cost_change = fp_results.second;
 
@@ -106,14 +128,18 @@ DDP::Solution<T, nx, nu, type> DDP::DDP_Solver<T, nx, nu, type>::solve(const Eig
         if (verbose >= 1) {cout << "Solution not found, exiting..." << endl;}
         break;
     }
-    if (timing_level >= 1) {
-        t2 = high_resolution_clock::now();
-        ms = (t2 - t1);
-    }
+    if (timing_level >= 1) {total_Time = total_Timer.Stop();}
 
     if (it >= max_iters && verbose >= 1) { cout << "Max iterations reached" << endl;}
 
-    DDP::Solution<T, nx, nu, type> sol = DDP::Solution<T, nx, nu, type>(X, U, fs.K, std::vector<type>(Costs.begin(), Costs.begin()+it), it-1, ms.count());
+    if (timing_level >= 2) {
+        cout << "FP Average and Total Time: " << fp_Timer.avg_Time() << "µs, " << fp_Timer.total_Time() << "µs" << endl;
+        cout << "BP Average and Total Time: " << bp_Timer.avg_Time() << "µs, " << bp_Timer.total_Time() << "µs" << endl;
+        cout << "Cost Differentiation and Total Time: " << dCost_Timer.avg_Time() << "µs, " << dCost_Timer.total_Time()<< "µs" << endl;
+        cout << "Integrator Differentiation and Total Time: " << dIntegrator_Timer.avg_Time() << "µs, " << dIntegrator_Timer.total_Time()<< "µs" << endl;
+    }
+
+    DDP::Solution<T, nx, nu, type> sol = DDP::Solution<T, nx, nu, type>(X, U, fs.K, std::vector<type>(Costs.begin(), Costs.begin()+it), it-1, total_Time*(0.001));
     return sol;
 }
 
