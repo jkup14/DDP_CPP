@@ -44,47 +44,18 @@ class DifferentialDrive : public Dynamics<T, 3, 2, type> {
         const type width;
     
 };
-// template <int T, typename type=float>
-// class CartPole : public Dynamics<T, 4, 1, type> {
-//     public:  
-//         CartPole() {
-//             mass_pole = 0.05;
-//             mass_cart = 1;
-//             gravity = 9.8;
-//             pole_length = 2;
-//         } 
-//         Eigen::Matrix<type, 4, 1> xdot(const Eigen::Matrix<type, 4, 1>& x, const Eigen::Matrix<type, 1, 1>& u) const{
-//             // state is [displacement, angle, velocity, angular_velocity]
-//             type sin_angle = sin(x(1));
-//             type sin_angle_sqr = pow(sin_angle, 2);
-//             type cos_angle = cos(x(1));
-//             type ang_velocity_sqr = pow(x(3),2);
-//             return (Eigen::Matrix<type, 4, 1>() << 
-//                 x(2),
-//                 x(3),
-//                 (mass_pole*sin_angle
-//                     * (pole_length * ang_velocity_sqr * gravity * cos_angle)
-//                     + u) 
-//                     / (mass_cart + mass_pole * sin_angle_sqr),
-//                 (-mass_pole * pole_length * ang_velocity_sqr * cos_angle * sin_angle 
-//                     - (mass_cart + mass_pole) * gravity * sin_angle
-//                     - cos_angle * u)
-//                     / (pole_length * (mass_cart + mass_pole * sin_angle_sqr))
-//                 ).finished();
-//         }
-
-//         void differentiate_dynamics(const Eigen::Matrix<type, T, 2>& X, const Eigen::Matrix<type, T-1, 2>& U, Dynamics_Jacobians_Struct<T, 2, 2>& djs) const {
-//             djs.xdotx = std::vector<Eigen::Matrix<type, 2, 2> >(T-1, Eigen::Matrix<type, 2, 2>::Zero());
-//             djs.xdotu = std::vector<Eigen::Matrix<type, 2, 2> >(T-1, Eigen::Matrix<type, 2, 2>::Identity());
-//         }
-
-//     private:
-//         type mass_pole;
-//         type mass_cart;
-//         type gravity;
-//         type pole_length;
-    
-// };
+template <int T, typename type=float>
+class CartPole : public Dynamics<T, 4, 1, type> {
+    public:  
+        CartPole();
+        Eigen::Matrix<type, 4, 1> xdot(const Eigen::Matrix<type, 4, 1>& x, const Eigen::Matrix<type, 1, 1>& u) const;
+        void differentiate_dynamics(const Eigen::Matrix<type, T, 4>& X, const Eigen::Matrix<type, T-1, 1>& U, Dynamics_Jacobians_Struct<T, 4, 1>& djs) const;
+    private:
+        const type mass_pole;
+        const type mass_cart;
+        const type gravity;
+        const type pole_length;
+};
 
 #include "../source/dynamics.cpp"
 
