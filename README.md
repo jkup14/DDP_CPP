@@ -1,7 +1,7 @@
 # Differential Dynamic Programming in C++
 The popular trajectory optimization technique implemented in C++ and the Eigen Library for the linear algebra. Heavily typed and templated so that all matrices have knowns sizes. This allows Eigen to optimize during compilation. 
 
-#### Cart Pole:
+#### Cart Pole Swing-Up:
 ![animation](cart_pole_animation.gif)
 
 #### Highlights
