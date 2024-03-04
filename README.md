@@ -16,8 +16,6 @@ matplotplusplus 1.2.0
 
 ## Build instructions
 ~~~
-git clone https://github.com/alandefreitas/matplotplusplus/ # clone as subdirectory
-
 cd /DDP_CPP
 
 cmake -B build # make build directory
@@ -30,33 +28,34 @@ cmake --build build # make executables in /executables, run this every time you 
 ./executables/Differential_Drive
 ./executables/Double_Integrator
 ./executables/Single_Integrator
+./executables/Cart_Pole
 ~~~
 
 ## Code Structure
 
-Example files **Double_Integrator.cpp, Single_Integrator.cpp, Differential_Drive.cpp** gives a general idea on how the code should work.  
+Example files **Double_Integrator.cpp, Single_Integrator.cpp, Differential_Drive.cpp, Cart_Pole.cpp** give a general idea on how the code should work.  
 
 $~$
 
 #### Headers in /include, .cpp's in /source
 
-cost.hpp: cost interface
-
-cost.cpp: quadratic cost function  
+cost.hpp/cpp: cost interface and quadratic cost 
 
 $~$
 
-dynamics.hpp: dynamics interface
+dynamics.hpp/cpp: dynamics interface
 
-dynamics.cpp: single and double integrator, differential drive  
-
-$~$
-
-integrator.hpp: integrator interface
-
-integrator.cpp: Euler integrator for discretized dynamics  
+dynamics_derived: single and double integrator, differential drive, cart pole 
 
 $~$
 
-ddp.hpp/cpp: DDP algorothm with linesearch and regularization implemented. 
+integrator.hpp/cpp: integrator interface, Euler integrator
+
+$~$
+
+ddp.hpp/cpp: DDP algorithm with linesearch and regularization implemented. 
+
+$~$
+
+plot_functions.hpp/cpp: Visualizer object with 2d visualization implemented 
 
