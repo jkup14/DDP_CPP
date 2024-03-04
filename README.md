@@ -5,7 +5,7 @@ The popular trajectory optimization technique implemented in C++ and the Eigen L
 ![animation](cart_pole_animation.gif)
 
 #### Highlights
-* Sub 10 ms runtimes for Differential Drive with randomized start and goal states.
+* ~25 µs/iteration, ~2ms solution time for Differential Drive with randomized start and goal states.
 
 * Animation for trajectories using matplotplusplus
 
