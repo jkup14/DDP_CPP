@@ -28,8 +28,8 @@ void Visualizer::animate_2d_solution(matplot::figure_handle &f, const Eigen::Mat
     multi_set_aspect(axes, 1);
 
     traj_ax->title("Trajectory");
-    traj_ax->xlabel("x");
-    traj_ax->ylabel("y");
+    traj_ax->xlabel(state_names[0]);
+    traj_ax->ylabel(state_names[1]);
     
 
     std::vector<matplot::line_handle> time_lines;

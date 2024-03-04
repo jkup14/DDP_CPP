@@ -6,7 +6,7 @@
 #include "../include/integrator.hpp"
 #include "../include/cost.hpp"
 #include <Eigen/LU>
-#include "sign_func.cpp"
+#include "../include/helper_funcs.hpp"
 #include "../include/timer.hpp"
 
 using std::chrono::high_resolution_clock;

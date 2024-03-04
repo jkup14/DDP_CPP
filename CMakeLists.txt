@@ -27,7 +27,7 @@ foreach(exec ${executables})
         include/dynamics_derived/CartPole.hpp
         source/timer.cpp
         source/plot_functions.cpp
-        include/sign_func.hpp
+        include/helper_funcs.hpp
     )
     target_include_directories(${exec} #must be the same executable name
         PRIVATE

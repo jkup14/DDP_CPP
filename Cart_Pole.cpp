@@ -16,7 +16,9 @@ int main() {
 
     Eigen::Matrix<float,nx,1> x0 = Eigen::Matrix<float, nx, 1>::Zero();
     Eigen::Matrix<float,T,nx> X = Eigen::Matrix<float, T, nx>::Zero();
-    Eigen::Matrix<float,1,nx> x_goal = (Eigen::Matrix<float,1,nx>()<<0,3.1415,0,0).finished();
+    // Eigen::Matrix<float,1,nx> x_goal = (Eigen::Matrix<float,1,nx>()<<0,3.1415,0,0).finished();
+    Eigen::Matrix<float,1,nx> x_goal = (Eigen::Matrix<float,1,nx>()<<0,0,0,0).finished();
+
     Eigen::Matrix<float,T,nx> X_track = x_goal.replicate<T,1>();
     Eigen::Matrix<float,T-1,nu> U = Eigen::Matrix<float, T-1, nu>::Constant(0);
 
