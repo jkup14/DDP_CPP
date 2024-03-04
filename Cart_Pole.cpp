@@ -16,8 +16,8 @@ int main() {
 
     Eigen::Matrix<float,nx,1> x0 = Eigen::Matrix<float, nx, 1>::Zero();
     Eigen::Matrix<float,T,nx> X = Eigen::Matrix<float, T, nx>::Zero();
-    // Eigen::Matrix<float,1,nx> x_goal = (Eigen::Matrix<float,1,nx>()<<0,3.1415,0,0).finished();
-    Eigen::Matrix<float,1,nx> x_goal = (Eigen::Matrix<float,1,nx>()<<0,0,0,0).finished();
+    Eigen::Matrix<float,1,nx> x_goal = (Eigen::Matrix<float,1,nx>()<<0,3.1415,0,0).finished();
+    // Eigen::Matrix<float,1,nx> x_goal = (Eigen::Matrix<float,1,nx>()<<0,0,0,0).finished();
 
     Eigen::Matrix<float,T,nx> X_track = x_goal.replicate<T,1>();
     Eigen::Matrix<float,T-1,nu> U = Eigen::Matrix<float, T-1, nu>::Constant(0);
@@ -27,14 +27,14 @@ int main() {
 
     //Cost
     auto Q = Eigen::Matrix<float, nx, nx>::Identity()*0.001;
-    auto R = Eigen::Matrix<float, nu, nu>::Identity()*0.00001;
+    auto R = Eigen::Matrix<float, nu, nu>::Identity()*0.0001;
     auto Qf = Eigen::Matrix<float, nx, nx>::Identity()*1;
     QuadraticCost<T, nx, nu> cost(Q, R, Qf);
     
     //Initialize Solver
     DDP::solver_args args;
     args.verbose = 0;
-    args.toggle_ls = false;
+    // args.toggle_ls = false;
     args.timing_level = 1;
     DDP::DDP_Solver<T, nx, nu> solver(dynamics, cost, args);
     // Solve!
