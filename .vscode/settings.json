@@ -95,6 +95,14 @@
         "numericaldiff": "cpp",
         "openglsupport": "cpp",
         "specialfunctions": "cpp",
-        "splines": "cpp"
+        "splines": "cpp",
+        "orderingmethods": "cpp",
+        "*.inc": "cpp",
+        "__hash_table": "cpp",
+        "hash_map": "cpp",
+        "regex": "cpp",
+        "unordered_set": "cpp",
+        "stack": "cpp",
+        "cholesky": "cpp"
     }
 }

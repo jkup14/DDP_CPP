@@ -1,9 +1,6 @@
 #include <iostream>
 #include "include/ddp.hpp"
-// #include "include/dynamics.hpp"
-// #include "include/integrator.hpp"
-// #include "include/return_type_structs.hpp"
-// #include "include/cost.hpp"
+#include "include/dynamics_derived/SingleIntegrator.hpp"
 
 //TODO eigen print formatting perhaps
 
@@ -17,7 +14,7 @@ int main() {
 
     Eigen::Matrix<float,nx,1> x0 = Eigen::Matrix<float, nx, 1>::Zero();
     Eigen::Matrix<float,T,nx> X = Eigen::Matrix<float, T, nx>::Zero();
-    Eigen::Matrix<float,1,nx> x_goal = (Eigen::Matrix<float,1,nx>()<<1,2).finished();
+    Eigen::Matrix<float,1,nx> x_goal = (Eigen::Matrix<float,1,nx>()<<1,3).finished();
     Eigen::Matrix<float,T,nx> X_track = x_goal.replicate<T,1>();
     Eigen::Matrix<float,T-1,nu> U = Eigen::Matrix<float, T-1, nu>::Constant(1);
 
@@ -44,9 +41,12 @@ int main() {
 
     //Test cost
     auto Q = Eigen::Matrix<float, nx, nx>::Identity()*0;
-    auto R = Eigen::Matrix<float, nu, nu>::Identity()*0.00001;
+    auto R = Eigen::Matrix<float, nu, nu>::Identity()*0.1;
     auto Qf = Eigen::Matrix<float, nx, nx>::Identity()*1;
     QuadraticCost<T, nx, nu> cost(Q, R, Qf);
+    cout << "Q:" << endl << cost.Q << endl 
+         << "R:" << endl << cost.R << endl 
+         << "Qf:" << endl << cost.Qf << endl;
     cout << "Cost:" << endl;
     cout << cost.cost(X, U, X_track) << endl;
     Cost_Jacobians_Struct<T, nx, nu> cjs;
@@ -77,7 +77,7 @@ int main() {
         Eigen::Matrix<float, T-1, nu>::Zero(), 
         std::vector<Eigen::Matrix<float, nu, nx> >(10-1, Eigen::Matrix<float,nu,nx>::Zero()),
         std::vector<float>(T, 1.5),
-        10);
+        10, 10);
     cout << sol << endl;
 
 }

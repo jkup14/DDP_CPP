@@ -3,12 +3,13 @@
 #include "include/ddp.hpp"
 #include <matplot/matplot.h>
 #include "include/plot_functions.hpp"
+#include "include/dynamics_derived/DifferentialDrive.hpp"
 
 
 //TODO eigen print formatting perhaps
 
 int main() {
-    const int T = 1000;
+    const int T = 100;
     float dt = 0.01;
     DifferentialDrive<T> Model = DifferentialDrive<T>();
     const int nx = Model.getNx();
@@ -44,7 +45,8 @@ int main() {
     cout << "DDP done in " << sol.it << " iterations and " << sol.ms << "ms." << endl;
     cout << "Final error: " << sol.X.row(T-1)-x_goal << endl;
 
-    // matplot::figure_handle f = matplot::figure(true);
-    // animate_2d_solution(f, sol.X, T, dt);    
-    // matplot::show();
+    matplot::figure_handle f = matplot::figure(true);
+    Visualizer visualizer(Visualization_Type::two_d);
+    visualizer.animate(f, sol.X, X_track, T, dt, Model.get_state_names());    
+    matplot::show();
 }

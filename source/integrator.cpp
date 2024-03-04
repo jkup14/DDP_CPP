@@ -6,7 +6,7 @@ using std::cout;
 using std::endl;
 
 template <int T, int nx, int nu, typename type>
-Integrator<T, nx, nu, type>::Integrator(const Dynamics<T, nx, nu, type>& dynamics_, type dt_)
+Integrator<T, nx, nu, type>::Integrator(const Dynamics_Abstract<T, nx, nu, type>& dynamics_, type dt_)
             :dynamics(dynamics_), dt(dt_) {}
 
 template <int T, int nx, int nu, typename type>
@@ -18,7 +18,7 @@ void Integrator<T, nx, nu, type>::rollout_controls(const Eigen::Matrix<float, nx
 }
 
 template <int T, int nx, int nu, typename type>
-EulerIntegrator<T, nx, nu, type>::EulerIntegrator(const Dynamics<T, nx, nu, type>& dynamics_, type dt_)
+EulerIntegrator<T, nx, nu, type>::EulerIntegrator(const Dynamics_Abstract<T, nx, nu, type>& dynamics_, type dt_)
             : Integrator<T, nx, nu, type>(dynamics_, dt_) {}
 
 template <int T, int nx, int nu, typename type>

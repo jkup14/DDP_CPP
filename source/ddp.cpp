@@ -124,7 +124,9 @@ DDP::Solution<T, nx, nu, type> DDP::DDP_Solver<T, nx, nu, type>::solve(const Eig
             continue; // go to next iteration
         } 
         // go to next iteration if regularization is successful
-        if (toggle_reg && increaseReg(mu, delta)) {continue;} 
+        if (toggle_reg && increaseReg(mu, delta)) {
+            continue;
+        } 
         if (verbose >= 1) {cout << "Solution not found, exiting..." << endl;}
         break;
     }
@@ -249,7 +251,8 @@ void DDP::DDP_Solver<T, nx, nu, type>::backward_pass(const Cost_Jacobians_Struct
         Vxx = 0.5 * (Vxx + Vxx.transpose()); //[nx,nx]
 
         deltaV.first += fs.k.row(t) * Qu;
-        deltaV.second += 0.5 * fs.k.row(t) * Quu * fs.k.row(t).transpose();
+        auto deltaV_second = 0.5 * fs.k.row(t) * Quu * fs.k.row(t).transpose();
+        deltaV.second += deltaV_second(0);
         }
 }
 
