@@ -1,5 +1,10 @@
 # Differential Dynamic Programming in C++
-The popular trajectory optimization technique implemented in C++ and the Eigen Library for the linear algebra. Heavily typed and templated so that all matrices have knowns sizes. This allows Eigen to optimize during compilation. **Highlight: Sub 10 ms runtimes for Differential Drive with randomized start and goal states.**
+The popular trajectory optimization technique implemented in C++ and the Eigen Library for the linear algebra. Heavily typed and templated so that all matrices have knowns sizes. This allows Eigen to optimize during compilation. 
+
+#### Highlights
+* Sub 10 ms runtimes for Differential Drive with randomized start and goal states.
+
+* Animation for trajectories using matplotplusplus
 
 **Next steps: additional dynamics functions, multi-shooting/multi-threading, mpc, automatic differentiation, control constraints via box-ddp**
 
