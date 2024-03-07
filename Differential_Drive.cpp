@@ -27,7 +27,8 @@ int main() {
     EulerIntegrator<T, nx, nu> dynamics(Model, dt);
 
     //Cost
-    auto Q = Eigen::Matrix<float, nx, nx>::Identity()*0;
+    Eigen::Matrix<float,nx,nx> Q = Eigen::Matrix<float, nx, nx>::Identity()*0;
+    Q(2,2) = 0.01;
     auto R = Eigen::Matrix<float, nu, nu>::Identity()*0.0001;
     auto Qf = Eigen::Matrix<float, nx, nx>::Identity()*100;
     QuadraticCost<T, nx, nu> cost(Q, R, Qf);
@@ -44,7 +45,7 @@ int main() {
     cout << "Solving..." << endl;
     DDP::Solution<T, nx, nu> sol = solver.solve(x0, U, X_track);
     cout << "Done" << endl;
-    cout << "DDP done in " << sol.it << " iterations and " << sol.ms << "ms." << endl;
+    cout << "DDP done in " << sol.it << " iterations and " << sol.microseconds << "µs." << endl;
     cout << "Start: " << x0.transpose() << endl;
     cout << "Goal: " << x_goal << endl;
     cout << "Final error: " << sol.X.row(T-1)-x_goal << endl;

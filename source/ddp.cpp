@@ -141,7 +141,7 @@ DDP::Solution<T, nx, nu, type> DDP::DDP_Solver<T, nx, nu, type>::solve(const Eig
         cout << "Integrator Differentiation and Total Time: " << dIntegrator_Timer.avg_Time() << "µs, " << dIntegrator_Timer.total_Time()<< "µs" << endl;
     }
 
-    DDP::Solution<T, nx, nu, type> sol = DDP::Solution<T, nx, nu, type>(X, U, fs.K, std::vector<type>(Costs.begin(), Costs.begin()+it), it-1, total_Time*(0.001));
+    DDP::Solution<T, nx, nu, type> sol = DDP::Solution<T, nx, nu, type>(X, U, fs.K, std::vector<type>(Costs.begin(), Costs.begin()+it), it-1, total_Time);
     return sol;
 }
 
